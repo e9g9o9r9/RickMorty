@@ -4,8 +4,8 @@ import Characters from "src/components/Characters/Characters";
 import Episode from "src/components/Episode/Episode";
 import Location from "src/components/Location/Location";
 import Character from "src/components/Character/Character";
-import { AppWrapper } from "./style";
 import ProjectInfo from "./components/Info/ProjectInfo";
+import { AppWrapper } from "./style";
 
 const App = () => {
   return (
