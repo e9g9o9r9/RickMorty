@@ -13,7 +13,7 @@ const client = new ApolloClient({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/RickMorty">
     <ApolloProvider client={client}>
       <Global />
       <App />
