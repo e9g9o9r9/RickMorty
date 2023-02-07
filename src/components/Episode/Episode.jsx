@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import { useEpisodes } from "src/graphql/hooks/get-episodes";
 import { useCharactersEpisodes } from "src/graphql/hooks/get-episode-characters";
-import EpisodeSelect from "src/components/UI/MultipleSelect/EpisodeSelect";
+import EpisodeSelect from "src/components/UI/EpisodeSelect/EpisodeSelect";
 import CircularIndeterminate from "src/components/UI/CircularInder/CircularInder";
 import { SelectsWrapper } from "./style";
 
