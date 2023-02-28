@@ -3,17 +3,21 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 
-const NativeSelectDemo = ({ name, filters, handleChange }) => {
+const NativeSelectDemo = ({ name, handleChange }) => {
   return (
     <Box sx={{ minWidth: 160, marginRight: "20px" }}>
       <FormControl fullWidth>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native" shrink={true}>
+        <InputLabel
+          variant="standard"
+          htmlFor="uncontrolled-native"
+          shrink={true}
+        >
           {name.name}
         </InputLabel>
         <NativeSelect
           multiple={false}
           value={name.value}
-          name={`${name.name}`}
+          name={`${name.name}`.toLowerCase()}
           onChange={(event) =>
             handleChange(event.target.value, event.target.name)
           }

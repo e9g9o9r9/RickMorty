@@ -42,6 +42,9 @@ export const GET_CHARACTERS = gql`
 `;
 
 export const useCharacters = (page, name, status, species, gender, type) => {
+  if (!page) {
+    page = 1;
+  }
   const { loading, error, data } = useQuery(GET_CHARACTERS, {
     variables: {
       page,

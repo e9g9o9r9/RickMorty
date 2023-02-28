@@ -37,6 +37,10 @@ const EpisodeSelect = ({
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
           value={episodeName}
+          displayEmpty
+          renderValue={
+            episodeName !== "" ? undefined : () => "Select episode..."
+          }
           onChange={handleChange}
         >
           {data?.episodes?.results.map((item, index) => (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -8,11 +8,11 @@ import { useCharacters } from "src/graphql/hooks/get-characters";
 import NativeSelectDemo from "src/components/UI/NativeSelectDemo/NativeSelectDemo";
 import CircularIndeterminate from "src/components/UI/CircularInder/CircularInder";
 import Card from "src/components/Card/Card";
-import { SearchWrapper, SelectsWrapper, CharactersWrapper } from "./style";
 import Error from "src/components/Error/Error";
+import NoResults from "src/components/NoResults/NoResults";
+import { SearchWrapper, SelectsWrapper, CharactersWrapper } from "./style";
 
 const Characters = () => {
-  const [page, setPage] = useState(1);
   const [isError, setIsError] = useState(false);
   const [textError, setTextError] = useState("");
   const [filters, setFilters] = useState({
@@ -24,14 +24,23 @@ const Characters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
 
+  useEffect(() => {
+    if (searchParams.get("page") === null) {
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
+    }
+  }, [searchParams, setSearchParams]);
+
   const params = [];
+
+  const getPage = parseInt(searchParams.get("page"));
 
   searchParams.forEach((value, key) => {
     params[key] = value;
   });
 
   const { loading, error, data } = useCharacters(
-    page,
+    getPage,
     params.name,
     params.status,
     params.species,
@@ -41,13 +50,13 @@ const Characters = () => {
 
   const filterNames = [
     {
-      name: "status",
+      name: "Status",
       items: ["Alive", "Dead", "Unknown"],
       value: filters.status,
     },
 
     {
-      name: "species",
+      name: "Species",
       items: [
         "Human",
         "Alien",
@@ -65,13 +74,13 @@ const Characters = () => {
     },
 
     {
-      name: "gender",
+      name: "Gender",
       items: ["Male", "Female", "Genderless", "Unknown"],
       value: filters.gender,
     },
 
     {
-      name: "type",
+      name: "Type",
       items: [
         "Genetic experiment",
         "Parasite",
@@ -108,8 +117,8 @@ const Characters = () => {
       return;
     }
     setIsError(false);
-    setSearchParams({ name: searchInput });
-    setPage(1);
+    searchParams.set("name", searchInput);
+    setSearchParams(searchParams);
   };
 
   const filterCharacters = () => {
@@ -124,15 +133,17 @@ const Characters = () => {
 
       return;
     }
-
-    setSearchParams({
-      status: filters.status,
-      species: filters.species,
-      gender: filters.gender,
-      type: filters.type,
-    });
-    setPage(1);
+    searchParams.set("status", filters.status);
+    searchParams.set("species", filters.species);
+    searchParams.set("gender", filters.gender);
+    searchParams.set("type", filters.type);
+    setSearchParams(searchParams);
     setIsError(false);
+  };
+
+  const handlePage = (event, value) => {
+    searchParams.set("page", value);
+    setSearchParams(searchParams);
   };
 
   return (
@@ -164,9 +175,11 @@ const Characters = () => {
             label="Search character"
             type="search"
             variant="standard"
-            value={searchInput}
+            value={params.name}
+            InputLabelProps={{ shrink: true }}
             onChange={(event) => setSearchInput(event.currentTarget.value)}
             sx={{
+              marginRight: "20px",
               width: {
                 xs: "250px",
                 sm: "280px",
@@ -180,7 +193,6 @@ const Characters = () => {
             Search
           </Button>
         </SearchWrapper>
-
         <SelectsWrapper>
           {filterNames.map((name, index) => {
             return (
@@ -216,15 +228,23 @@ const Characters = () => {
           setIsError={setIsError}
         />
       )}
-      <Card data={data} />
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Pagination
-          count={data?.characters?.info?.pages}
-          page={page}
-          onChange={(event, value) => setPage(value)}
-          color="primary"
-        />
-      </Box>
+
+      {data?.characters?.results.length !== 0 ? (
+        <>
+          <Card data={data} />
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Pagination
+              count={data?.characters?.info?.pages}
+              defaultPage={1}
+              page={getPage}
+              onChange={handlePage}
+              color="primary"
+            />
+          </Box>
+        </>
+      ) : (
+        <NoResults />
+      )}
     </CharactersWrapper>
   );
 };

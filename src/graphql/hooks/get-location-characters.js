@@ -7,6 +7,7 @@ export const GET_CHARACTERS_LOCATIONS = gql`
       residents {
         image
         name
+        id
       }
 
       name

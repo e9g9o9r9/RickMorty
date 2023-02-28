@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box/Box";
 import ActionAreaCard from "src/components/UI/ActionAreaCard/ActionAreaCard";
+
 const Card = ({ data }) => {
   return (
     <Box
