@@ -7,6 +7,7 @@ export const GET_EPISODES_CHARACTERS = gql`
       characters {
         name
         image
+        id
       }
 
       name

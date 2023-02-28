@@ -35,6 +35,10 @@ const LocationSelect = ({
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
           value={locationName}
+          displayEmpty
+          renderValue={
+            locationName !== "" ? undefined : () => "Select location..."
+          }
           onChange={handleChange}
         >
           {data?.locations?.results.map((item, index) => (
